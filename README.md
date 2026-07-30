@@ -4,6 +4,13 @@
 
 ---
 
+## 🔗 Live Deployment Links
+- **Live Frontend Application (Vercel):** [https://music-catalog-platform-5lo4.vercel.app](https://music-catalog-platform-5lo4.vercel.app)
+- **Live Backend API (Render):** [https://music-catalog-backend-zwrx.onrender.com](https://music-catalog-backend-zwrx.onrender.com)
+- **GitHub Repository:** [https://github.com/Sasmitaojha/music-catalog-platform](https://github.com/Sasmitaojha/music-catalog-platform)
+
+---
+
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Focus Choice Rationale](#focus-choice-rationale)
@@ -42,8 +49,8 @@ Streaming platforms need a seamless way to allow users to build personal music l
 ### Backend
 - **Language & Framework**: Java 17, Spring Boot 3.3.4
 - **Security & Auth**: Spring Security, JJWT (`io.jsonwebtoken`), BCrypt Password Encoding
-- **Data & Persistence**: Spring Data JPA, H2 (In-Memory default for zero-config run) / PostgreSQL
-- **Build Tool**: Gradle 9.5 (`./gradlew`)
+- **Data & Persistence**: Spring Data JPA, H2 (In-Memory default) / PostgreSQL (Production)
+- **Build Tool**: Gradle (`./gradlew`)
 - **Testing**: JUnit 5, Mockito
 
 ### Frontend
@@ -119,88 +126,4 @@ The application includes **3 AI Insights Modes**:
 ### 1. Run Backend
 ```bash
 cd backend
-./gradlew.bat bootRun
-```
-Backend will start on `http://localhost:8080`.
-H2 Web Console available at `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:musicdb`, Username: `sa`, Password: `password`).
-
-### 2. Run Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend will start on `http://localhost:5173`.
-
-### 3. Run Backend Unit Tests
-```bash
-cd backend
-./gradlew.bat test
-```
-
----
-
-## Docker & Live Deployment Guide
-
-### One-Click Local Orchestration
-```bash
-docker-compose up --build
-```
-This boots up:
-- PostgreSQL database container on port `5432`
-- Spring Boot backend container on port `8080`
-- React Frontend container (Nginx) on port `3000`
-
-### Local Development Override
-For local development with live reload, use:
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
-```
-This starts:
-- backend in `bootRun` mode on port `8080`
-- frontend Vite dev server on port `5173`
-
-### Deploying to Render / Railway / Vercel
-1. **Backend (Render / Railway)**:
-   - Deploy `backend/` as Docker service or Java Web Service.
-   - Set Environment Variables: `SPRING_PROFILES_ACTIVE=prod`, `SPRING_DATASOURCE_URL=jdbc:postgresql://...`, `JWT_SECRET=...`.
-2. **Frontend (Vercel / Netlify)**:
-   - Connect repository and select `frontend/` directory.
-   - Build command: `npm run build`, Output directory: `dist`.
-
----
-
-## Trade-offs & Technical Decisions
-
-1. **H2 vs PostgreSQL**:
-   - *Decision*: H2 in-memory DB used by default for zero-configuration developer experience out of the box, with full PostgreSQL driver and `application-prod.properties` provided for production environments.
-2. **Custom SVG Visual Charts vs Recharts/Chart.js**:
-   - *Decision*: Implemented clean SVG chart rendering for high performance, zero external package vulnerabilities, precise glassmorphic styling, and seamless responsive design across all viewports.
-3. **State Management**:
-   - *Decision*: React Context (`AuthContext`) combined with state lifting for library data to keep bundle lightweight and fast without Redux overhead.
-
-   ---
-
-   ## Quick API & Deployment Notes
-
-   - Backend runs by default on `http://localhost:8080` and exposes the API under `/api`.
-
-   - Important endpoints:
-      - `POST /api/auth/register` — Register new user (body: `username`, `email`, `password`) → returns JWT.
-      - `POST /api/auth/login` — Login (body: `username`, `password`) → returns JWT.
-      - `GET /api/search?query=...&type=album&limit=25` — Proxy to iTunes Search API.
-      - `GET /api/library` — Get authenticated user's library (supports filtering & pagination).
-      - `POST /api/library` — Save album to library (authenticated).
-      - `PUT /api/library/{id}` — Update rating/notes (authenticated).
-      - `DELETE /api/library/{id}` — Remove saved album (authenticated).
-      - `GET /api/analytics` — Returns analytics payload for charts.
-      - `POST /api/ai/insights` — Generate AI recommendations / summaries from saved library.
-
-   - Frontend expects the backend base URL in the env var `VITE_API_URL` (defaults to `http://localhost:8080/api`).
-
-   - Deployment tips:
-      - Backend: Render or Railway — supply a managed Postgres DB and set `APP_JWT_SECRET` (32+ chars) and `SPRING_DATASOURCE_URL`/credentials.
-      - Frontend: Vercel or Netlify — set `VITE_API_URL` to your deployed backend's `/api` base.
-      - DB: Use Supabase or managed Postgres for production; update `application-prod.properties` with connection details.
-
-   If you want, I can add a small `.env.example` and a `deploy.md` with step-by-step Render/Vercel instructions.
+./gradlew bootRun
