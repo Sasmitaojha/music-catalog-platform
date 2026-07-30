@@ -1,15 +1,12 @@
 # Build Stage
-FROM node:22-alpine AS build
+FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
-COPY package*.json ./
-RUN npm install
 COPY . .
-RUN npm run build
+RUN ./gradlew bootJar --no-daemon
 
-# Production Stage with Nginx
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Run Stage
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: soundpulse-backend
+    env: java
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: chmod +x ./gradlew && ./gradlew build
+    startCommand: java -jar build/libs/demo-1.0.0.jar
+    healthCheckPath: /api/search?query=music&type=album&limit=1
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: APP_JWT_SECRET
+        generateValue: true
+      - key: APP_JWT_EXPIRATION_MS
+        value: 86400000
+      - key: JAVA_VERSION
+        value: 17
