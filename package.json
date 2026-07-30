@@ -1,0 +1,11 @@
+{
+  "name": "music-catalog-platform",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

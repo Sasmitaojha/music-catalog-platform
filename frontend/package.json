@@ -13,6 +13,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "axios": "^1.18.1",
     "lucide-react": "^1.27.0",
+    "music-catalog-platform": "file:..",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "vite": "^8.1.1"
